@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"strconv"
-	"unicode"
 
 	"main/cmd/utils"
 )
@@ -17,25 +16,16 @@ func Part1() {
 	var sum int
 
 	for scanner.Scan() {
-		var firstAndLast [2]byte
-		var lastChar byte
+		digits := extractDigits(scanner.Text())
 
-		for _, c := range scanner.Bytes() {
-			if unicode.IsDigit(rune(c)) {
-				lastChar = c
+		if len(digits) > 0 {
+			firstDigit := string(digits[0])
+			lastDigit := string(digits[len(digits)-1])
+			num, err := strconv.Atoi(firstDigit + lastDigit)
+
+			if err == nil {
+				sum += num
 			}
-
-			if lastChar != 0 && firstAndLast[0] == 0 {
-				firstAndLast[0] = lastChar
-			}
-		}
-
-		firstAndLast[1] = lastChar
-
-		num, e := strconv.Atoi(fmt.Sprintf("%s", firstAndLast[:]))
-
-		if e == nil {
-			sum += num
 		}
 	}
 

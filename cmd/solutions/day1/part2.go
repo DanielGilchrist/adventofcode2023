@@ -4,9 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"main/cmd/utils"
+	"slices"
 	"strconv"
 	"strings"
-	"unicode"
 )
 
 var wordsToDigits = map[string]string{
@@ -29,29 +29,28 @@ func Part2() {
 	scanner := bufio.NewScanner(file)
 	var sum int
 
+	var i int
 	for scanner.Scan() {
-		var firstAndLast [2]byte
-		var lastChar byte
+		fmt.Println("i: ", i)
+		text := scanner.Text()
+		fmt.Println("1: ", text)
+		line := convertWordsToDigits(text)
+		digits := extractDigits(line)
+		fmt.Println("2: ", digits)
 
-		line := []byte(convertWordsToDigits(scanner.Text()))
+		if len(digits) > 0 {
+			firstDigit := string(digits[0])
+			lastDigit := string(digits[len(digits)-1])
+			num, err := strconv.Atoi(firstDigit + lastDigit)
 
-		for _, c := range line {
-			if unicode.IsDigit(rune(c)) {
-				lastChar = c
-			}
-
-			if lastChar != 0 && firstAndLast[0] == 0 {
-				firstAndLast[0] = lastChar
+			if err == nil {
+				fmt.Println("3: ", num)
+				sum += num
 			}
 		}
 
-		firstAndLast[1] = lastChar
-
-		num, e := strconv.Atoi(fmt.Sprintf("%s", firstAndLast[:]))
-
-		if e == nil {
-			sum += num
-		}
+		i++
+		fmt.Println("")
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -59,14 +58,41 @@ func Part2() {
 		return
 	}
 
+	i++
 	fmt.Println(sum)
 }
 
-// TODO: This doesn't handle cases where word numbers overlap e.g. twone or threeight
 func convertWordsToDigits(line string) string {
+	var indexMap = make(map[int]string)
+
 	for word, number := range wordsToDigits {
-		line = strings.Replace(line, word, number, -1)
+		if index := strings.Index(line, word); index != -1 {
+			indexMap[index] = number
+		}
+	}
+
+	i := 0
+	keys := sortedKeys(indexMap)
+	for _, index := range keys {
+		number := indexMap[index]
+		offsetIndex := index + i
+		line = line[:offsetIndex] + number + line[offsetIndex:]
+		i++
 	}
 
 	return line
+}
+
+func sortedKeys(m map[int]string) []int {
+	keys := make([]int, len(m))
+	i := 0
+
+	for k := range m {
+		keys[i] = k
+		i++
+	}
+
+	slices.Sort(keys)
+
+	return keys
 }
