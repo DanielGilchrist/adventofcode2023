@@ -38,10 +38,5 @@ func calibrate(f func(string) string) {
 		}
 	}
 
-	if err := scanner.Err(); err != nil {
-		fmt.Println(err)
-		return
-	}
-
 	fmt.Println(sum)
 }

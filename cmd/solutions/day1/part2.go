@@ -6,7 +6,6 @@ import (
 )
 
 var wordsToDigits = map[string]string{
-	"zero":  "0",
 	"one":   "1",
 	"two":   "2",
 	"three": "3",
