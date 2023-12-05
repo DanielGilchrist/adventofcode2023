@@ -13,9 +13,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var part1 bool
-var part2 bool
-
 var day1Cmd = &cobra.Command{
 	Use:   "day1",
 	Short: "Day 1 solutions",
@@ -23,14 +20,15 @@ var day1Cmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		if part1 {
 			Part1()
+		} else if part2 {
+			Part2()
+		} else {
+			cmd.Help()
 		}
 	},
 }
 
 func init() {
-	day1Cmd.Flags().BoolVarP(&part1, "part1", "1", false, "Execute part 1 solution")
-	day1Cmd.Flags().BoolVarP(&part2, "part2", "2", false, "Execute part 2 solution")
-
 	rootCmd.AddCommand(day1Cmd)
 }
 
