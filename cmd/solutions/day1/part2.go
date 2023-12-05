@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"main/cmd/utils"
-	"slices"
 	"strconv"
 	"strings"
 )
@@ -29,14 +28,9 @@ func Part2() {
 	scanner := bufio.NewScanner(file)
 	var sum int
 
-	var i int
 	for scanner.Scan() {
-		fmt.Println("i: ", i)
-		text := scanner.Text()
-		fmt.Println("1: ", text)
-		line := convertWordsToDigits(text)
+		line := convertWordsToDigits(scanner.Text())
 		digits := extractDigits(line)
-		fmt.Println("2: ", digits)
 
 		if len(digits) > 0 {
 			firstDigit := string(digits[0])
@@ -44,13 +38,9 @@ func Part2() {
 			num, err := strconv.Atoi(firstDigit + lastDigit)
 
 			if err == nil {
-				fmt.Println("3: ", num)
 				sum += num
 			}
 		}
-
-		i++
-		fmt.Println("")
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -58,41 +48,16 @@ func Part2() {
 		return
 	}
 
-	i++
 	fmt.Println(sum)
 }
 
 func convertWordsToDigits(line string) string {
-	var indexMap = make(map[int]string)
-
 	for word, number := range wordsToDigits {
-		if index := strings.Index(line, word); index != -1 {
-			indexMap[index] = number
-		}
-	}
-
-	i := 0
-	keys := sortedKeys(indexMap)
-	for _, index := range keys {
-		number := indexMap[index]
-		offsetIndex := index + i
-		line = line[:offsetIndex] + number + line[offsetIndex:]
-		i++
+		first := string(word[0])
+		last := string(word[len(word)-1])
+		paddedNumber := fmt.Sprintf("%s%s%s", first, number, last)
+		line = strings.ReplaceAll(line, word, paddedNumber)
 	}
 
 	return line
-}
-
-func sortedKeys(m map[int]string) []int {
-	keys := make([]int, len(m))
-	i := 0
-
-	for k := range m {
-		keys[i] = k
-		i++
-	}
-
-	slices.Sort(keys)
-
-	return keys
 }
