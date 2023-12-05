@@ -41,6 +41,7 @@ func Part1() {
 
 	if err := scanner.Err(); err != nil {
 		fmt.Println(err)
+		return
 	}
 
 	fmt.Println(sum)
