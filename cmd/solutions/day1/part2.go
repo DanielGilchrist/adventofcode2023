@@ -1,10 +1,7 @@
 package day1
 
 import (
-	"bufio"
 	"fmt"
-	"main/cmd/utils"
-	"strconv"
 	"strings"
 )
 
@@ -22,33 +19,10 @@ var wordsToDigits = map[string]string{
 }
 
 func Part2() {
-	file := utils.OpenInputFile("day1.txt")
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	var sum int
-
-	for scanner.Scan() {
-		line := convertWordsToDigits(scanner.Text())
-		digits := extractDigits(line)
-
-		if len(digits) > 0 {
-			firstDigit := string(digits[0])
-			lastDigit := string(digits[len(digits)-1])
-			num, err := strconv.Atoi(firstDigit + lastDigit)
-
-			if err == nil {
-				sum += num
-			}
-		}
-	}
-
-	if err := scanner.Err(); err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	fmt.Println(sum)
+	calibrate(func(line string) string {
+		converted := convertWordsToDigits(line)
+		return extractDigits(converted)
+	})
 }
 
 func convertWordsToDigits(line string) string {
