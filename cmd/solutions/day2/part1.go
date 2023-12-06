@@ -93,7 +93,7 @@ func parseGames() []Game {
 
 		var turns [][2]string
 
-		// ["1 red", "5 blue", "10 green; 5 green", "6 blue", "12 red; 4 red", "10 blue", "4 green"]
+		// ["1 red", "5 blue", "10 green", "5 green", "6 blue", "12 red", "4 red", "10 blue", "4 green"]
 		for _, gameStr := range strings.Split(rest, ", ") {
 			// ["1", "red"]
 			gameStrSplit := strings.Split(gameStr, " ")
