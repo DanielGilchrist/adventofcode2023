@@ -80,6 +80,7 @@ func parseGames() []Game {
 
 	scanner := bufio.NewScanner(file)
 
+	gameId := 1
 	for scanner.Scan() {
 		// "Game 1: 1 red, 5 blue, 10 green; 5 green, 6 blue, 12 red; 4 red, 10 blue, 4 green"
 		line := scanner.Text()
@@ -87,14 +88,9 @@ func parseGames() []Game {
 		// ["Game 1", "1 red, 5 blue, 10 green; 5 green, 6 blue, 12 red; 4 red, 10 blue, 4 green"]
 		split := strings.Split(line, ": ")
 
-		// "Game 1"
-		gameStr := split[0]
+		// "1 red, 5 blue, 10 green, 5 green, 6 blue, 12 red, 4 red, 10 blue, 4 green"
+		rest := strings.ReplaceAll(split[1], "; ", ", ")
 
-		// "1 red, 5 blue, 10 green; 5 green, 6 blue, 12 red; 4 red, 10 blue, 4 green"
-		rest := split[1]
-
-		gameIDStr := strings.Split(gameStr, " ")[1]
-		id := stringToInt(gameIDStr)
 		var turns [][2]string
 
 		// ["1 red", "5 blue", "10 green; 5 green", "6 blue", "12 red; 4 red", "10 blue", "4 green"]
@@ -106,12 +102,13 @@ func parseGames() []Game {
 			numColour := gameStrSplit[0]
 
 			// "red"
-			colour := strings.ReplaceAll(gameStrSplit[1], ";", "")
+			colour := gameStrSplit[1]
 
 			turns = append(turns, [2]string{numColour, colour})
 		}
 
-		games = append(games, NewGame(id, turns))
+		games = append(games, NewGame(gameId, turns))
+		gameId++
 	}
 
 	return games
