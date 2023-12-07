@@ -14,7 +14,7 @@ var day2Cmd = &cobra.Command{
 		if part1 {
 			day2.Part1()
 		} else if part2 {
-			// day2.Part2()
+			day2.Part2()
 		} else {
 			cmd.Help()
 		}
