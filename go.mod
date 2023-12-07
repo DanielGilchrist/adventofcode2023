@@ -1,6 +1,6 @@
 module main
 
-go 1.21.4
+go 1.21.5
 
 require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
