@@ -3,8 +3,9 @@ package day1
 import (
 	"bufio"
 	"fmt"
-	"main/cmd/utils"
 	"strconv"
+
+	"main/cmd/utils"
 )
 
 func extractDigits(line string) string {
@@ -18,13 +19,9 @@ func extractDigits(line string) string {
 }
 
 func calibrate(f func(string) string) {
-	file := utils.OpenInputFile("day1.txt")
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
 	var sum int
 
-	for scanner.Scan() {
+	utils.ReadInputFile("day1.txt", func(scanner *bufio.Scanner) {
 		digits := f(scanner.Text())
 
 		if len(digits) > 0 {
@@ -36,7 +33,7 @@ func calibrate(f func(string) string) {
 				sum += num
 			}
 		}
-	}
+	})
 
 	fmt.Println(sum)
 }
